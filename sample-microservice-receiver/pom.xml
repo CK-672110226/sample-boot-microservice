@@ -10,9 +10,9 @@
 		<relativePath />
 	</parent>
 	<groupId>th.ac.mfu</groupId>
-	<artifactId>sample-microservice-hello</artifactId>
+	<artifactId>sample-microservice-receiver</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<description>Service to saying hello</description>
+	<description>Service to receiving hello</description>
 	<properties>
 		<java.version>11</java.version>
 		<spring-cloud.version>2020.0.3</spring-cloud.version>
