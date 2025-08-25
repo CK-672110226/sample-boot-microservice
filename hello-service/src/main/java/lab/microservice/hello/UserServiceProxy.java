@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @FeignClient(name = "user-service")
 public interface UserServiceProxy {
-    
     @GetMapping("/api/users/{id}")
     User retrieveUsername(@PathVariable Long id);
 }

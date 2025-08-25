@@ -17,10 +17,11 @@ RUN apk add --no-cache dumb-init
 WORKDIR /app
 COPY --from=build /app/target/*.jar app.jar
 
+# Expose port (will be overridden by environment variable)
 EXPOSE 8081
 
 # Minimal JVM options for demo
 ENV JAVA_OPTS="-Xmx128m -Xms64m"
 
-# Simple entrypoint with dumb-init
-ENTRYPOINT ["dumb-init", "sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Simple entrypoint with dumb-init and dynamic port support
+ENTRYPOINT ["dumb-init", "sh", "-c", "java $JAVA_OPTS -jar app.jar --server.port=${SERVER_PORT:-8081}"]

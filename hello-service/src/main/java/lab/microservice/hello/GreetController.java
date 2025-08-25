@@ -29,7 +29,7 @@ public class GreetController {
     @GetMapping("/api/greet/{id}")
     public ResponseEntity<String> greet(@PathVariable Long id) {
 
-        // call user-service via Feign
+        // call user-service via Feign (with load balancing)
         User user = proxy.retrieveUsername(id);
 
         LocalTime currentTime = LocalTime.now();
@@ -42,8 +42,9 @@ public class GreetController {
             greeting = "Good evening!";
         }
         
-        String message = greeting + " " + user.getName() + "! (from port " + user.getPort() + ")";
-        logger.info("RESPONSE: " + message);
+        String message = String.format("%s %s! (Called user-service instance on port %d)", 
+                                     greeting, user.getName(), user.getPort());
+        logger.info("RESPONSE: {} - Load balanced to port {}", message, user.getPort());
 
         return ResponseEntity.ok(message);
     }
