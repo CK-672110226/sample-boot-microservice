@@ -19,6 +19,11 @@ services:
     init: false
     tty: false
     stdin_open: false
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8761/actuator/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
 
   # User Service Instance 1 - Ultra minimal
   user-service-1:
@@ -46,7 +51,8 @@ services:
     networks:
       - microservice-network
     depends_on:
-      - naming-server
+      naming-server:
+        condition: service_healthy
     # Ultra-minimal resource allocation
     mem_limit: 128m
     cpus: 0.25
@@ -54,6 +60,11 @@ services:
     init: false
     tty: false
     stdin_open: false
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8081/actuator/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
 
   # User Service Instance 2 - Ultra minimal
   user-service-2:
@@ -81,7 +92,8 @@ services:
     networks:
       - microservice-network
     depends_on:
-      - naming-server
+      naming-server:
+        condition: service_healthy
     # Ultra-minimal resource allocation
     mem_limit: 128m
     cpus: 0.25
@@ -89,6 +101,11 @@ services:
     init: false
     tty: false
     stdin_open: false
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8082/actuator/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
 
   # Hello Service - Ultra minimal
   hello-service:
@@ -116,9 +133,12 @@ services:
     networks:
       - microservice-network
     depends_on:
-      - naming-server
-      - user-service-1
-      - user-service-2
+      naming-server:
+        condition: service_healthy
+      user-service-1:
+        condition: service_healthy
+      user-service-2:
+        condition: service_healthy
     # Ultra-minimal resource allocation
     mem_limit: 128m
     cpus: 0.25
@@ -126,6 +146,11 @@ services:
     init: false
     tty: false
     stdin_open: false
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:8080/actuator/health"]
+      interval: 15s
+      timeout: 3s
+      retries: 10
 
 networks:
   microservice-network:
